@@ -49,10 +49,10 @@ class Translator:
                 _text = _text.replace("'", "")
                 _text = _text.replace("“", "")
                 _text = _text.replace("”", "")
-                text = text.replace("‘", "")
-                text = text.replace("’", "")
-                text = text.replace("\\", "")
-                text = text.replace("?", "")
+                _text = _text.replace("‘", "")
+                _text = _text.replace("’", "")
+                _text = _text.replace("\\", "")
+                _text = _text.replace("?", "")
                 text[i] = _text
                 i += 1
         else:
