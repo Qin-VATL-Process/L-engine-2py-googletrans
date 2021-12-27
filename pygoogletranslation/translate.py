@@ -22,10 +22,13 @@ from pygoogletranslation.models import Translated, Detected
 class Translator:
 
     def __init__(self, host=urls.TRANSLATE, proxies=None, timeout=None,
-                retry=3, sleep=5, retry_messgae=False):
+                retry=3, sleep=5, retry_messgae=False,change_url=None):
         self.host = host if 'http' in host else 'https://' + host
         self.rpcids = RPCIDS
-        self.transurl = urls.TRANSLATEURL
+        if change_url:
+            self.transurl = change_url if 'http' in change_url else 'https://' + change_url
+        else:
+            self.transurl = urls.TRANSLATEURL
         if proxies is not None:
             self.proxies = proxies
         else:
@@ -46,6 +49,10 @@ class Translator:
                 _text = _text.replace("'", "")
                 _text = _text.replace("“", "")
                 _text = _text.replace("”", "")
+                text = text.replace("‘", "")
+                text = text.replace("’", "")
+                text = text.replace("\\", "")
+                text = text.replace("?", "")
                 text[i] = _text
                 i += 1
         else:
@@ -53,6 +60,11 @@ class Translator:
             text = text.replace("'", "")
             text = text.replace("“", "")
             text = text.replace("”", "")
+            text = text.replace("‘", "")
+            text = text.replace("’", "")
+            text = text.replace("\\", "")
+            text = text.replace("?", "")
+
         
         if src != 'auto':
             if src.lower() in LANGCODES:
@@ -83,7 +95,7 @@ class Translator:
             try:
                 translated = data[0][2][1][0][0][5][0][0]
             except:
-                translated = ""
+                translated = data[0][2][1][0][0][0]
             extra_data = {}
             try:
                 src = data[0][2][3][5][0][0][3]
@@ -191,7 +203,7 @@ class Translator:
                 else:
                     raise Exception('Unexpected status code {} from {}'.format(response.status_code, self.transurl))
                     return False
-            translated_list.append(utils.format_translation(trans_list))
+            translated_list.append(utils.format_translation(trans_list,dest))
         return translated_list
 
     def retry_request(self, data, params):
@@ -265,6 +277,10 @@ class Translator:
         text = text.replace("'", "")
         text = text.replace("“", "")
         text = text.replace("”", "")
+        text = text.replace("‘", "")
+        text = text.replace("’", "")
+        text = text.replace("\\", "")
+        text = text.replace("?", "")
         data = self._translate(text, src=src, dest=dest)
         return self.extract_translation(data, text)
   

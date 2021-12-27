@@ -61,7 +61,7 @@ def format_response(a):
         if flag:
             li_filter.append(_b)
     fi_data = str(''.join(li_filter)).replace('"[', '[').replace(']"', ']').replace('\\n', '').replace('\\','')    
-    li_data = json.loads(fi_data.split('pygoogletranslation')[1].replace('"[', '[').replace(']"', ']'))
+    li_data = json.loads(fi_data.split('pygoogletranslation')[1].replace('"[', '[').replace(']"', ']'),strict=False)
     return li_data
     
 def tokenize_sentence(text):
@@ -85,12 +85,22 @@ def tokenize_sentence(text):
     return text_list
 
 
-def format_translation(translated):
+def format_translation(translated,dest):
     text = ''
     pron = ''
     for _translated in translated:
         try:
-            text += _translated[0][2][1][0][0][5][0][0]
+            try:
+                if dest=="fr":
+                    tran_list = _translated[0][2][1][0][0][0] if _translated[0][2][1][0][0][2]=='(masculine)' else _translated[0][2][1][0][1][0]
+                else:
+                    tran_list = _translated[0][2][1][0][0][5]
+                for tmp_tran in tran_list:
+                    text += tmp_tran[0]
+            except:
+                tran_list = _translated[0][2][1][0]
+                for tmp_tran in tran_list:
+                    text += tmp_tran[0]
         except:
             text += fix_trans_error(_translated)
         try:
@@ -103,7 +113,7 @@ def format_translation(translated):
             _translated[0][2][1][0][0][5][0][0] = text
             break
         except:
-            pass
+            _translated[0][2][1][0][0][0]=text
     try:
         _translated[0][2][1][0][0][1] = pron
     except:
