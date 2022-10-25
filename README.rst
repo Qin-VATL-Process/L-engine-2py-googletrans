@@ -5,16 +5,41 @@ PYGOOGLETRANSLATION
 解决了翻译过程中遇到的两个问题：
 
 1) 只翻译首句 -> 现在可以翻译完整句子
-
+   无论句子多长，源码只会返回第一句的翻译结果
+   for tmp_tran in tran_list: #遍历所有句子的翻译
+      text += tmp_tran[0]
+      
 2) 处理法语中，单个单词无法返回翻译的情况：eg, 输入"good" --法语翻译--> bon (阳性) / bonne (阴性)，这种情况在原代码中无法正确处理，导致返回失败，现在解决了这个问题。
 
 3) 部分符号导致翻译不通过 -> 新增符号过滤"‘","’","\\","?"
+   text = text.replace("‘", "")  #新增
+   text = text.replace("’", "") #新增
+   text = text.replace("\\", "") #新增
+   text = text.replace("?", "") #新增
+
 
 注意事项：
 
 1) 翻译期间需要连接外网
 
 2) 翻译过程中还会因为一些符号而出现无法翻译的情况，可自行排查，如："[","]","`","»"等，在翻译推文时这些错误很常见
+
+使用流程
+   从上面的链接下载开源项目，本地安装：
+   pip install pygoogletranslation
+   使用过程：
+   在文件根目录下创建文件translate.py，先简单测试一下是否能翻译：
+   from pygoogletranslation import Translator
+   def trans_single():
+       text="a trench is a type of excavation or depression in the ground that is generally deeper than it is wide ( as opposed to a wider gully, or ditch ), and narrow compared with its length ( as opposed to a simple hole ). in geology, trenches are created as a result of erosion by rivers or by geological movement of tectonic plates. in the civil engineering field, trenches are often created to install underground infrastructure or utilities ( such as gas mains, water mains or telephone lines ), or later to access these installations. trenches have also often been dug for military defensive purposes. in archaeology, the trench method is used for searching and excavating ancient ruins or to dig into strata of sedimented material."
+       lang="zh-cn"
+
+       translator = Translator(retry_messgae=True)
+       t = translator.translate(text, dest=lang)
+       translation = t.text
+       print(text, translation)
+   # trans_single()
+
 
 以下是转载正文：
 ===================
