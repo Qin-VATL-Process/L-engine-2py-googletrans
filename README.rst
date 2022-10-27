@@ -16,6 +16,16 @@ PYGOOGLETRANSLATION
    text = text.replace("’", "") #新增
    text = text.replace("\\", "") #新增
    text = text.replace("?", "") #新增
+   
+4)ImportError: cannot import name 'TranslatedPart' from 'googletrans.models'
+   cd the following path
+   YOUR PYTHON INSTALL PATH /lib/site-packages/pygoogletranslation/utils.py
+
+   comment the code
+   from googletrans.models import TranslatedPart #about 8th line
+
+   write new import
+   from pygoogletranslation.models import TranslatedPart
 
 
 注意事项：
